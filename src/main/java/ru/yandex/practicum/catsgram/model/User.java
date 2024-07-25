@@ -11,7 +11,7 @@ import lombok.*;
 @EqualsAndHashCode(of = {"email"})
 public class User {
 
-    final Long id;
+    Long id;
 
     String username;
 
