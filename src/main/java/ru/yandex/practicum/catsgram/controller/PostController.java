@@ -1,4 +1,3 @@
-
 package ru.yandex.practicum.catsgram.controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,7 @@ public class PostController {
         posts.put(post.getId(), post);
         return post;
     }
+
     @PutMapping
     public Post update(@RequestBody Post newPost) {
         // проверяем необходимые условия
