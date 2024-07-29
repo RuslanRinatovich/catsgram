@@ -18,7 +18,7 @@ import java.util.Optional;
 public class PostService {
     private final Map<Long, Post> posts = new HashMap<>();
     UserService userService;
-
+    private static Integer globalId = 0;
     public PostService(UserService userService) {
         this.userService = userService;
     }
@@ -27,12 +27,18 @@ public class PostService {
         return posts.values();
     }
 
-    public Post create(Post post) {
-        Optional<User> user = userService.findUserById(post.getAuthorId());
-        if (user.isEmpty()) {
-            throw new ConditionsNotMetException("«Автор с id =" + post.getAuthorId() + " не найден");
-        }
+    public Optional<Post> getPostById(long postId)
+    {
+        return posts.values().stream().filter(p -> p.getId() == postId).findFirst();
+    }
 
+    public Post create(Post post) {
+        User user = userService.findUserById(post.getAuthorId());
+        if (user == null) {
+            throw new NotFoundException(String.format(
+                    "Пользователь %s не найден",
+                    post.getAuthorId()));
+        }
         if (post.getDescription() == null || post.getDescription().isBlank()) {
             throw new ConditionsNotMetException("Описание не может быть пустым");
         }
@@ -59,11 +65,13 @@ public class PostService {
     }
 
     private long getNextId() {
-        long currentMaxId = posts.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+
+        return globalId++;
+    }
+
+    public Post findPostById(long postId) {
+        return posts.values().stream().filter(p -> p.getId().equals(postId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format("Пост № %d не найден", postId)));
     }
 }
