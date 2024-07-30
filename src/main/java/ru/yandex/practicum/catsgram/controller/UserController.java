@@ -3,6 +3,7 @@ package ru.yandex.practicum.catsgram.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.model.User;
 import ru.yandex.practicum.catsgram.service.UserService;
+
 import java.util.*;
 
 @RestController
@@ -21,14 +22,14 @@ public class UserController {
     }
 
 
-    @GetMapping(value = {"/{id}" })
+    @GetMapping(value = {"/{id}"})
     @ResponseBody
     public User getUser(@PathVariable Long id) {
         return userService.findUserById(id);
     }
+
     @PostMapping
     public User create(@RequestBody User user) {
-
         return userService.create(user);
     }
 
