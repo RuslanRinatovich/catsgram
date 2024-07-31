@@ -1,6 +1,8 @@
 package ru.yandex.practicum.catsgram.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
@@ -25,10 +27,10 @@ public class PostController {
             @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort) {
 
 
-        if(!(sort.equals("asc") || sort.equals("desc"))){
+        if (!(sort.equals("asc") || sort.equals("desc"))) {
             throw new IllegalArgumentException();
         }
-        if(page < 0 || size <= 0){
+        if (page < 0 || size <= 0) {
             throw new IllegalArgumentException();
         }
 
@@ -37,8 +39,10 @@ public class PostController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Post create(@RequestBody Post post) {
         return postService.create(post);
+
     }
 
     @PutMapping
